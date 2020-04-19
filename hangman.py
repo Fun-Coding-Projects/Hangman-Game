@@ -1,35 +1,34 @@
 #!/usr/bin/env python3.8
 '''
-Hangman Game by Simon Holland / Inyoka (Basic)
+Hangman Game by Simon Holland / Inyoka (Advanced)
 '''
 
 import random
 import os
+import re
+import time
 
 from levels import level_6 as words
+from gallows import gallows
+
 
 myword = random.choice(words)
 game_state = list(reversed(range(0,7)))
-guessed_letters = []
-wrong_letters = []
+guessed_letters, wrong_letters = [], []
+
 
 def main():
-
     while not won() and game_state[len(wrong_letters)] != 0:
-        clear()
-        status()
-        myguess = input('Enter a letter : ').lower()
-        guess(myguess)
+        run()
 
     if won():
         clear()
-        print(f'Congratulations, you won! The word was "{myword.upper()}"')
         status()
-
+        print(f'Congratulations, you won! The word was "{myword.upper()}"\n')
     else :
         clear()
-        print(f'Sorry the word was {myword.upper()}')
         status()
+        print(f'Sorry the word was {myword.upper()}\n')
 
 
 def clear():
@@ -62,9 +61,25 @@ def hide_letters(word):
     return hidden_letters
 
 
+def show_letters(wrong_letters):
+    return ', '.join(wrong_letters)
+
+
 def status():
-    print(f'Guesses left : {game_state[len(wrong_letters)]}')
-    print(f'Remaining : {hide_letters(myword)}')
+    print(f'Guesses left : {game_state[len(wrong_letters)]}\n')
+    print(f'Mistakes : {show_letters(wrong_letters)}')
+    print(gallows[len(wrong_letters)])
+    print(f'Remaining : {hide_letters(myword)}\n')
+
+
+def run():
+    clear()
+    status()
+    myguess = input('Enter a letter : ').lower()
+    if re.match('[a-z]', myguess) :
+        guess(myguess[0])
+    else :
+        run()
 
 
 if __name__ == '__main__':
