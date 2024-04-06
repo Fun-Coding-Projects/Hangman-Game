@@ -8,7 +8,7 @@ import os
 import re
 import time
 
-from levels import level_6 as words
+from levels import level_7 as words
 from gallows import gallows
 
 
